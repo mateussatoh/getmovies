@@ -11,28 +11,25 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    fetch(FEATURED_API)
-      .then((response) => response.json())
-      .then((data) => {
-        setMovies(data.results);
-      });
-  }, []);
-
-  const handleOnSubmit = (event) => {
-    console.log("handleonsubmit");
-
-    event.preventDefault();
-    fetch(SEARCH_API + searchTerm)
+  const getMovie = (API) => {
+    fetch(API)
       .then((response) => response.json())
       .then((data) => {
         setMovies(data.results);
       });
   };
 
-  const handleOnChange = (event) => {
-    console.log("handleonchange");
+  useEffect(() => {
+    getMovie(FEATURED_API);
+  }, []);
 
+  const handleOnSubmit = (event) => {
+    event.preventDefault();
+    getMovie(SEARCH_API + searchTerm);
+    setSearchTerm("");
+  };
+
+  const handleOnChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
