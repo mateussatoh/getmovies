@@ -29,6 +29,11 @@ function App() {
     setSearchTerm("");
   };
 
+  const handleOnClick = (event) => {
+    event.preventDefault();
+    getMovie(FEATURED_API);
+  };
+
   const handleOnChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -37,7 +42,7 @@ function App() {
   return (
     <div className="movie-container">
       <div className="header">
-        <h2>🍿 getmovies</h2>
+        <h2 onClick={handleOnClick}>🍿 getmovies</h2>
         <form onSubmit={handleOnSubmit}>
           <input
             className="search"
