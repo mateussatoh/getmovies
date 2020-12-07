@@ -1,29 +1,60 @@
-import React, {useEffect, useState} from 'react';
-import Movie from './components/Movie'
-import Header from './components/Header'
+import React, { useEffect, useState } from "react";
+import Movie from "./components/Movie";
 
-const FEATURED_API = 'https://api.themoviedb.org/3/discover/movie?api_key=c944654ad3b949198223249fc79385cc&language=pt-BR&sort_by=popularity.desc&'
-const SEARCH_API = 'https://api.themoviedb.org/3/search/company?api_key=c944654ad3b949198223249fc79385cc&query=test'
+const FEATURED_API =
+  "https://api.themoviedb.org/3/discover/movie?api_key=c944654ad3b949198223249fc79385cc&language=pt-BR&sort_by=popularity.desc&";
+
+const SEARCH_API =
+  "https://api.themoviedb.org/3/search/movie?api_key=c944654ad3b949198223249fc79385cc&language=pt-BR&query=";
 
 function App() {
-  const [movies, setMovies] = useState([])
+  const [movies, setMovies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetch(FEATURED_API)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      setMovies(data.results)
-    })
-  }, [])
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies(data.results);
+      });
+  }, []);
 
+  const handleOnSubmit = (event) => {
+    console.log("handleonsubmit");
+
+    event.preventDefault();
+    fetch(SEARCH_API + searchTerm)
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies(data.results);
+      });
+  };
+
+  const handleOnChange = (event) => {
+    console.log("handleonchange");
+
+    setSearchTerm(event.target.value);
+  };
+
+  // Page return
   return (
-    
     <div className="movie-container">
-      < Header/>
-    {movies.length > 0 && movies.map((movie) => <Movie key={movie.id} {...movie} />)}
-    </div>)
-  
+      <div className="header">
+        <h2>🍿 getmovies</h2>
+        <form onSubmit={handleOnSubmit}>
+          <input
+            className="search"
+            type="text"
+            placeholder="Pesquise um filme"
+            value={searchTerm}
+            onChange={handleOnChange}
+          />
+        </form>
+      </div>
+      {movies.length > 0 &&
+        movies.map((movie) => <Movie key={movie.id} {...movie} />)}
+    </div>
+  );
 }
 
 export default App;
